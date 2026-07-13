@@ -24,6 +24,26 @@ Enter:
     mov ah, 0x0e
     int 0x10
     ret
+    
+BackSpace:
+    test cx, cx
+    jz main
+    mov byte [di-1], 0
+    dec di
+    dec cx
+
+    mov ah, 0x0E
+    mov al, 8
+    int 0x10
+
+    mov al, ' '
+    int 0x10
+
+    mov al, 8
+    int 0x10
+    jmp main
+
+
 
 clr_pfr:
   mov di, puffer
@@ -35,15 +55,15 @@ clr_pfr:
     ret
 
 strcmp:
-    push di             ; elmenti di-t mert módosítjuk
+    push di             
 check_loop:
-    mov al, [di]        ; puffer következő karaktere
-    mov bl, [si]        ; parancs következő karaktere
+    mov al, [di]        
+    mov bl, [si]        
 
-    cmp al, bl          ; egyeznek?
+    cmp al, bl          
     jne not_match
 
-    test al, al         ; végére értünk?
+    test al, al         
     jz end_check
 
     inc di
@@ -51,11 +71,11 @@ check_loop:
     jmp check_loop
 
 not_match:
-    mov ax, 1           ; ax = 1, nem egyeznek
-    pop di              ; visszaállítjuk di-t
+    mov ax, 1           
+    pop di              
     ret
 
 end_check:
-    xor ax, ax          ; ax = 0, egyeznek
-    pop di              ; visszaállítjuk di-t
+    xor ax, ax          
+    pop di              
     ret

@@ -1,4 +1,5 @@
 ENTER_KEY equ 13
+BACKSPACE equ 8
 BOTL equ 13         ; Begining of the line (BOTL)
 NEWLINE equ 10
 
@@ -12,6 +13,7 @@ kernel_start:
     mov es, ax
     mov ss, ax
     mov di, puffer
+    mov cx, 0
     call clr_screen
 
 ;WRITE A WELCOME MSG TO THE SCREEN
@@ -25,8 +27,11 @@ main:
     int 0x16
     cmp al, ENTER_KEY
     je enter_push
+    cmp al, BACKSPACE
+    je BackSpace
     mov [di], al
     inc di
+    inc cx
     mov ah, 0x0E
     int 0x10
     jmp main
@@ -44,12 +49,13 @@ enter_push:
     int 0x10
     call shell
     mov di, puffer
+    xor cx, cx
     jmp main
 
 
-%include "/home/roland/Projects/16bit_os/gemini_f/kernel/shell.s"
-%include "/home/roland/Projects/16bit_os/gemini_f/kernel/commands.s"
-%include "/home/roland/Projects/16bit_os/gemini_f/kernel/functions.s"
+%include "/home/roland/Projects/16bit_os/kernel/shell.s"
+%include "/home/roland/Projects/16bit_os/kernel/commands.s"
+%include "/home/roland/Projects/16bit_os/kernel/functions.s"
 
 ; BYTES
 
