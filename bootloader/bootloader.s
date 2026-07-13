@@ -22,7 +22,7 @@ start:
     ; KERNEL BETÖLTÉSE
     mov bx, KERNEL_OFFSET   ; ES:BX -> ahová a memóriába töltünk (ES=0, BX=0x1000)
     mov ah, 0x02            ; BIOS olvasás funkció
-    mov al, 1               
+    mov al, 2               
     mov ch, 0               ; Cylinder 0
     mov dh, 0               ; Head 0
     mov cl, 2               ; Sector 2 (A bootloader utáni legelső szektor)
