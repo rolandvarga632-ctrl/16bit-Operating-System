@@ -23,6 +23,9 @@ welcome:
 
 ; THE MAIN OF THE KERNEL
 main:
+    mov si, promt_msg
+    call write
+input_loop:
     mov ah, 0x00
     int 0x16
     cmp al, ENTER_KEY
@@ -34,7 +37,7 @@ main:
     inc cx
     mov ah, 0x0E
     int 0x10
-    jmp main
+    jmp input_loop
 
 enter_push:
     mov byte [di], 0
@@ -62,6 +65,11 @@ enter_push:
 puffer:
     times 32 db 0
 
-welcome_msg db "Welcome in the R16-DOS!", BOTL, NEWLINE, NEWLINE, 0
+welcome_msg:
+    db "Welcome in the R16-DOS!", 13, 10
+    db "Type ,help' to show all available commands", 13, 10, 0
+promt_msg:
+    db "R16-DOS>",0
+
 times 1024 - ($ - $$) db 0
 

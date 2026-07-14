@@ -21,9 +21,10 @@ HELLO_CMD:
 HELLO_msg:
   db "Hello from R16-DOS, have a nice day!",13,10, 0
 Help_msg:
-  db "All available commands:", 13, 10,10
-  db "help - show this message", 13, 10
-  db "clear - clear the screen", 13, 10, 0
+  db "All Available commands:", 13, 10,10
+  db "help - Show this message", 13, 10
+  db "clear - Clear the screen", 13, 10
+  db "hello - Greating message", 13, 10, 0
 
 hello_cmd db "hello",0
 help_cmd db "help",0

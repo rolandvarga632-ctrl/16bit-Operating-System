@@ -27,7 +27,7 @@ Enter:
 
 BackSpace:
     test cx, cx
-    jz main
+    jz input_loop
     mov byte [di-1], 0
     dec di
     dec cx
@@ -41,7 +41,7 @@ BackSpace:
 
     mov al, 8
     int 0x10
-    jmp main
+    jmp input_loop
 
 
 
