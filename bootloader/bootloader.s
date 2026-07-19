@@ -13,6 +13,7 @@ start:
 
     
     mov [boot_drive], dl
+    
 
     
     mov si, msg_bootloader
@@ -21,7 +22,7 @@ start:
     
     mov bx, KERNEL_OFFSET   
     mov ah, 0x02            
-    mov al, 2               
+    mov al, 3               
     mov ch, 0               
     mov dh, 0               
     mov cl, 2               
@@ -31,7 +32,7 @@ start:
 
     jc lemez_hiba           
 
-    
+    mov [0x500], dl
     jmp 0x0000:KERNEL_OFFSET
 
 lemez_hiba:
