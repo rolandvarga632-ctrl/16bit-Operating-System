@@ -25,10 +25,21 @@ shell:
   test ax, ax
   jz LS
 
+  mov si, rmfile
+  call strcmp
+  test ax, ax
+  jz RMFILE
+
   jmp not_equ
 
 
 not_equ:
+  cmp byte [di], 0
+  je return
+  mov si, no_command
+  call write
   call clr_pfr
+return:
   ret
 
+no_command: db "Command not found!", 13, 10, 0

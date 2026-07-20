@@ -4,7 +4,36 @@ SECTOR_OFFSET equ 18
 FILENAME_OFFSET equ 16
 FIRST_SECTOR equ 0x06
 
-
+fs_find:
+  mov bx, 0x8000
+  mov al, 1
+  mov cl, 5
+  call disk_read
+  mov di, 0x8001
+  mov cx, 24
+find_loop:
+  cmp byte [di + STATUS_OFFSET], 0x01
+  je there_is_file
+  add di, 21
+  loop find_loop
+  jmp there_is_no_file
+there_is_file:
+  mov si, arg
+  call strcmp
+  test ax, ax
+  jz file_match
+  add di, 21
+  jmp find_loop
+file_match:
+  add di, SECTOR_OFFSET
+  xor ax, ax
+  ret
+there_is_no_file:
+  mov ax, 1 
+  mov si, not_found
+  call write
+  ret
+  
 
 fs_search:
   mov bx, 0x8000
@@ -126,4 +155,5 @@ clr_filename_puffer:
   ret
   
 file_name times 16 db 0
-full_msg db "The file directory is full(24 file max).",0
+not_found db "File not found!", 13, 10, 0
+full_msg db "The file directory is full(24 file max).",13, 10, 0
