@@ -33,6 +33,12 @@ LS:
 
 RMFILE:
   call fs_find
+  test ax, ax
+  jnz file_not_found
+  call file_remove
+  ret
+
+file_not_found:
   ret
 
 HELLO_msg:  db "Hello from R16-DOS, have a nice day!",13, 10, 0

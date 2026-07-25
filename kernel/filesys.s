@@ -1,6 +1,8 @@
 STATUS_OFFSET equ 20
+FS_START_ADR equ 0x8000
 MAX_FILES equ 0x18
 SECTOR_OFFSET equ 18
+NEXT_SECTOR_OFFSET equ 512
 FILENAME_OFFSET equ 16
 FIRST_SECTOR equ 0x06
 
@@ -11,19 +13,25 @@ fs_find:
   call disk_read
   mov di, 0x8001
   mov cx, 24
+  push ax
+  mov ax, 0
 find_loop:
   cmp byte [di + STATUS_OFFSET], 0x01
   je there_is_file
   add di, 21
+  inc ax
   loop find_loop
   jmp there_is_no_file
 there_is_file:
   mov si, arg
+  inc ax
+  push ax
   call strcmp
   test ax, ax
   jz file_match
+  pop ax
   add di, 21
-  jmp find_loop
+  loop find_loop
 file_match:
   add di, SECTOR_OFFSET
   xor ax, ax
@@ -33,7 +41,16 @@ there_is_no_file:
   mov si, not_found
   call write
   ret
-  
+
+file_remove:
+  pop ax
+  mov bx, FS_START_ADR
+  add bx, ax
+  mov al, 1
+  mov cl, [di]
+  call disk_read
+  ret
+
 
 fs_search:
   mov bx, 0x8000
